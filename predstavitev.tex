@@ -1,0 +1,84 @@
+\documentclass{beamer}
+
+% Nastavitve stila predstavitve
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+% Naslovna stran
+\title[Nizanje stopnje Bézierjevih krivulj]{Nizanje stopnje Bézierjevih krivulj z metodo najmanjših kvadratov}
+\author{Luka Polanič, Justin Raišp}
+\date{Ljubljana, 2024}
+
+\begin{document}
+
+% Naslovni diapozitiv
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Uvod
+\begin{frame}{Uvod}
+    \begin{itemize}
+        \item Obdelujemo problem zniževanja stopnje Bézierjevih krivulj iz $n$ na $m$, kjer $m < n$.
+        \item Cilj je minimizacija $L_2$-norme med originalno in aproksimirano krivuljo.
+        \item V nalogi uporabimo znanje o višanju stopnje Bézierjevih krivulj za razvoj postopka zniževanja.
+    \end{itemize}
+\end{frame}
+
+% Motivacija
+\begin{frame}{Motivacija}
+    \begin{itemize}
+        \item Bézierjeve krivulje se pogosto uporabljajo v računalniški grafiki in CAD sistemih.
+        \item Nižja stopnja krivulje omogoča:
+        \begin{itemize}
+            \item Optimizacijo shranjevanja podatkov.
+            \item Učinkovitejšo obdelavo in izris.
+        \end{itemize}
+        \item Problem formuliramo kot minimizacijo $L_2$-norme:
+        \[ d_2(p_n, q_m) = \sqrt{\int_0^1 \|p_n(t) - q_m(t)\|^2 dt}. \]
+    \end{itemize}
+\end{frame}
+
+% Definicije
+\begin{frame}{Definicije}
+    \begin{itemize}
+        \item Bézierjeva krivulja stopnje $n$:
+        \[ p_n(t) = \sum_{i=0}^n b_i B_i^n(t), \quad t \in [0, 1], \]
+        kjer so $b_i$ kontrolne točke, $B_i^n(t) = \binom{n}{i} t^i (1-t)^{n-i}$ pa Bernsteinovi bazni polinomi.
+        \item Bézierjeva krivulja stopnje $m < n$:
+        \[ q_m(t) = \sum_{i=0}^m c_i B_i^m(t), \quad t \in [0, 1]. \]
+        \item Cilj: Določiti $c_i$, da je $L_2$-razdalja minimalna.
+    \end{itemize}
+\end{frame}
+
+% Osnovni izrek
+\begin{frame}{Osnovni izrek}
+    \begin{block}{Izrek 3.2}
+        Naj bo $p_n$ Bézierjeva krivulja stopnje $n$ z $\Delta^n b_0 \neq 0$ in $2\alpha \leq n$. 
+        Faktorji $\lambda_i$ so podani kot:
+        \[ \lambda_i = \left(\frac{2n}{n + 2\alpha}\right)^{-1} \sum_{j=0}^i \binom{n}{j - \alpha} \binom{n}{j + \alpha}, \]
+        \noindent kontrolne točke $c_i$ pa izračunamo z:
+        \[ c_i = (1 - \lambda_i)c_i^{(I)} + \lambda_i c_i^{(II)}. \]
+        Tukaj $c_i^{(I)}$ in $c_i^{(II)}$ določimo z enačbama (5) in (6).
+    \end{block}
+\end{frame}
+
+% Algoritem
+\begin{frame}{Algoritem}
+    \begin{itemize}
+        \item Začetni podatki: kontrolne točke $b_0, \ldots, b_n$ in ciljna stopnja $m$.
+        \item Postopek:
+        \begin{enumerate}
+            \item Izračun $c_i^{(I)}$ in $c_i^{(II)}$ za stopnjo $n$ do $n-1$.
+            \item Izračun kombinacije $c_i$ z utežmi $\lambda_i$.
+            \item Ponavljanje postopka za nižanje stopnje do $m$.
+        \end{enumerate}
+        \item Lastnosti algoritma:
+        \begin{itemize}
+            \item Ohranja zveznost do reda $\alpha-1$ v robnih točkah.
+            \item $L_2$-norma ostaja minimalna.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\end{document}
