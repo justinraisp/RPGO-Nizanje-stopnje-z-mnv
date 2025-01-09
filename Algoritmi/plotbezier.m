@@ -1,17 +1,18 @@
-function p = plotbezier(B, t, c)
+function p = plotbezier(B, t, c, cpol_color)
 % Opis:
 % plotbezier nariše Bézierjevo krivuljo za dane kontrolne točke in
 % seznam parametrov
 %
 % Definicija:
-% p = plotbezier(B, t, c)
+% p = plotbezier(B, t, c, cpol_color)
 %
 % Vhodni podatki:
 % B matrika velikosti n+1 x d, ki predstavlja kontrolne točke
 % Bézierjeve krivulje stopnje n v d-dimenzionalnem prostoru,
 % t seznam parametrov dolžine k, pri katerih računamo vrednost
 % Bézierjeve krivulje,
-% c opcijski parameter, ki določa barvo krivulje
+% c opcijski parameter, ki določa barvo krivulje,
+% cpol_color opcijski parameter, ki določa barvo kontrolnega poligona.
 %
 % Izhodni podatek:
 % p grafični objekt, ki določa krivuljo
@@ -23,12 +24,16 @@ function p = plotbezier(B, t, c)
         c = 'k'; % Privzeta barva krivulje je črna
     end
 
+    if nargin < 4
+        cpol_color = [0.5, 0.5, 0.5]; % Privzeta barva kontrolnega poligona je siva
+    end
+
     if d == 1
         % 1D primer (ni pogosto uporabljen, zato lahko ostane prazen)
     elseif d == 2
         hold on
-        % Barva kontrolnega poligona (lahko jo pustimo privzeto)
-        p_cpol = plot(B(:,1), B(:,2), '--', 'Color', [0.5, 0.5, 0.5]);
+        % Barva kontrolnega poligona (privzeto ali podano)
+        p_cpol = plot(B(:,1), B(:,2), '--', 'Color', cpol_color);
 
         % Rdeče točke z manjšim markerjem
         p_cpts = scatter(B(:,1), B(:,2), 40, 'r', 'filled');
@@ -38,7 +43,7 @@ function p = plotbezier(B, t, c)
     elseif d == 3
         hold on
         % Barva kontrolnega poligona za 3D
-        p_cpol = plot3(B(:,1), B(:,2), B(:,3), '--', 'Color', [0.5, 0.5, 0.5]);
+        p_cpol = plot3(B(:,1), B(:,2), B(:,3), '--', 'Color', cpol_color);
 
         % Rdeče točke z manjšim markerjem
         p_cpts = scatter3(B(:,1), B(:,2), B(:,3), 40, 'r', 'filled');

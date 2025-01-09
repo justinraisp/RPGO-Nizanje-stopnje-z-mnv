@@ -28,11 +28,12 @@ function C = bezier_nmv_kontrolne_tocke(B, k,alpha)
     
     % Iterativno nizanje stopnje
     while k > 0
+        
         for i=1:(n-2)
             C1(i+1,:) = ((n .* B(i+1,:)) - i .* C1(i,:))/(n-i);
         end
         for i=(n-1):-1:2
-            C2(i,:) = (n .* B(i+1,:) - (n-i) .* C2(i+1,:))/i
+            C2(i,:) = (n .* B(i+1,:) - (n-i) .* C2(i+1,:))/i;
         end
         for i=1:(n-2)
             C(i+1,:) = (1-lambda(i+1)) .* C1(i+1,:) +  lambda(i+1) .* C2(i+1,:);
