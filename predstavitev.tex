@@ -5,7 +5,7 @@
 \usecolortheme{beaver}
 
 % Naslovna stran
-\title[Nizanje stopnje Bézierjevih krivulj]{Nizanje stopnje Bézierjevih krivulj z metodo najmanjših kvadratov}
+\title[Nižanje stopnje Bézierjevih krivulj]{Nižanje stopnje Bézierjevih krivulj z metodo najmanjših kvadratov}
 \author{Luka Polanič, Justin Raišp}
 \date{Ljubljana, 2024}
 
@@ -16,51 +16,64 @@
     \titlepage
 \end{frame}
 
-% Uvod
-\begin{frame}{Uvod}
-    \begin{itemize}
-        \item Obdelujemo problem zniževanja stopnje Bézierjevih krivulj iz $n$ na $m$, kjer $m < n$.
-        \item Cilj je minimizacija $L_2$-norme med originalno in aproksimirano krivuljo.
-        \item V nalogi uporabimo znanje o višanju stopnje Bézierjevih krivulj za razvoj postopka zniževanja.
-    \end{itemize}
-\end{frame}
-
 % Motivacija
 \begin{frame}{Motivacija}
-    \begin{itemize}
-        \item Bézierjeve krivulje se pogosto uporabljajo v računalniški grafiki in CAD sistemih.
-        \item Nižja stopnja krivulje omogoča:
-        \begin{itemize}
-            \item Optimizacijo shranjevanja podatkov.
-            \item Učinkovitejšo obdelavo in izris.
-        \end{itemize}
-        \item Problem formuliramo kot minimizacijo $L_2$-norme:
-        \[ d_2(p_n, q_m) = \sqrt{\int_0^1 \|p_n(t) - q_m(t)\|^2 dt}. \]
-    \end{itemize}
+    Podano imamo Bézierjevo krivuljo stopnje $n$:
+    \[ p_n(t) = \sum_{i=0}^n b_i B_i^n(t), \quad t \in [0, 1], \]
+    kjer so $b_i$ kontrolne točke in $B_i^n(t)$ Bernsteinovi bazni polinomi stopnje $n$.
+    Naš cilj je poiskati Bézierjevo krivuljo stopnje $m < n$,
+    \[ \tilde{p}_m(t) = \sum_{i=0}^m c_i B_i^m(t), \quad t \in [0, 1], \]
 \end{frame}
 
 % Definicije
-\begin{frame}{Definicije}
-    \begin{itemize}
-        \item Bézierjeva krivulja stopnje $n$:
-        \[ p_n(t) = \sum_{i=0}^n b_i B_i^n(t), \quad t \in [0, 1], \]
-        kjer so $b_i$ kontrolne točke, $B_i^n(t) = \binom{n}{i} t^i (1-t)^{n-i}$ pa Bernsteinovi bazni polinomi.
-        \item Bézierjeva krivulja stopnje $m < n$:
-        \[ q_m(t) = \sum_{i=0}^m c_i B_i^m(t), \quad t \in [0, 1]. \]
-        \item Cilj: Določiti $c_i$, da je $L_2$-razdalja minimalna.
-    \end{itemize}
+\begin{frame}{Metoda najmanjših kvadratov}
+  Kontrolne točke $c_i$ določimo tako, da minimiziramo $L_2$-normo med krivuljama $p_n$ in $\tilde{p}_m$, pri čemer je $L_2$-norma definirana kot:
+  \[ d_2(p_n, \tilde{p}_m) = \sqrt{\int_0^1 \|p_n(t) - \tilde{p}_m(t)\|^2 \, dt}, \]
+  kjer je $\|p_n(t) - \tilde{p}_m(t)\|^2$ kvadrat evklidske razdalje med krivuljama.
 \end{frame}
 
 % Osnovni izrek
-\begin{frame}{Osnovni izrek}
-    \begin{block}{Izrek 3.2}
-        Naj bo $p_n$ Bézierjeva krivulja stopnje $n$ z $\Delta^n b_0 \neq 0$ in $2\alpha \leq n$. 
-        Faktorji $\lambda_i$ so podani kot:
-        \[ \lambda_i = \left(\frac{2n}{n + 2\alpha}\right)^{-1} \sum_{j=0}^i \binom{n}{j - \alpha} \binom{n}{j + \alpha}, \]
-        \noindent kontrolne točke $c_i$ pa izračunamo z:
-        \[ c_i = (1 - \lambda_i)c_i^{(I)} + \lambda_i c_i^{(II)}. \]
-        Tukaj $c_i^{(I)}$ in $c_i^{(II)}$ določimo z enačbama (5) in (6).
-    \end{block}
+\begin{frame}{Konstrukcija}
+Nižanje stopnje iz $n$ na $n-1$. Če bi želeli zvišati stopnjo Bézierjeve krivulje, bi uporabili naslednjo zvezo: 
+\[
+b_i = \frac{i}{n} c_{i-1} + \frac{n-i}{n} c_i, \quad i = 0, 1, \ldots, n.
+\]
+Sedaj lahko na dva načina izrazimo zaporedje neznanih kontrolnih točk $\{c_i\}_{i=0}^{n-1}$.
+Dobimo dva sistema enačb, pri čemer bomo v obeh primerih zanemarili eno enačbo,
+saj bi bil sistem sicer predoločen.
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+    \item Zanemarimo zadnjo enačbo za $i = n$ in dobimo
+    \[
+    c_i^{(I)} = \frac{1}{n - i} \left( n b_i - i c_{i-1}^{(I)} \right) \quad \text{za} \quad i = 0, 1, \ldots, n - 1.
+    \]
+    Dodatno upoštevamo, da je $c_{-1} = 0$.
+    \item Pri drugi izražavi zanemarimo prvo enačbo, tj. za $i = 0$, in dobimo
+    \[
+    c_{i-1}^{(II)} = \frac{1}{i} \left( n b_i - (n - i) c_i^{(II)} \right) \quad \text{za} \quad i = n, \ldots, 1.
+    \]
+  \end{itemize}
+  Množici kontrolnih točk $\{c_i^{(I)}\}_{i=0}^{n-1}$ in $\{c_i^{(II)}\}_{i=0}^{n-1}$ predstavljata kontrolna poligona za dve različni Bézierjevi krivulji stopnje $n - 1$. Označimo ju z $\tilde{p}_{n-1}^{(I)}$ in $\tilde{p}_{n-1}^{(II)}$.
+\end{frame}
+
+\begin{frame}
+  Sedaj moramo poiskati še kontrolne točke $\{c_i\}_{i=0}^{n-1}$ končne Bézierjeve krivulje $\tilde{p}_{n-1}$.
+  Za kontrolne točke vzamemi linearno kombinacijo točk, določenih z zgornjima izrazoma:
+  \[ c_i = (1 - \lambda_i) \cdot c_i^{(I)} + \lambda_i \cdot c_i^{(II)} \quad \text{za} \quad i = 0, 1, \ldots, n - 1. \]
+  Z uvedbo faktorjev $\{\lambda_i \in \mathbb{R}\}$ prevedemo problem iskanja kontrolnih točk $\{c_i\}_i$ na problem računanja ustreznih faktorjev $\{\lambda_i\}_i$, za katere velja, da je $d_2(p_n, \tilde{p}_{n-1})$ minimalna.
+\end{frame}
+
+\begin{frame}{Izbira uteži}
+   Da se pokazati, da če za krivuljo $p_n$ z $\Delta_n b_0 \neq 0$ in $2\alpha \leq n$, izberemo faktorje $\lambda_i$ kot: 
+    \[
+    \lambda_i = \left( \frac{2n}{n + 2\alpha} \right)^{-1} \cdot \sum_{j=0}^i \left( \frac{n}{j - \alpha} \right) \left( \frac{n}{j + \alpha} \right), \quad i = 0, 1, \ldots, n - 1,
+    \]
+    potem za $t_0 = 0$ in $t_1 = 1$ velja:
+    \[
+    \frac{d^r}{dt^r} p_n(t) \bigg|_{t=t_0} = \frac{d^r}{dt^r} \tilde{p}_{n-1}(t) \bigg|_{t=t_0}, \quad 0 \leq r \leq \alpha - 1.
+    \]
 \end{frame}
 
 % Algoritem
@@ -79,6 +92,10 @@
             \item $L_2$-norma ostaja minimalna.
         \end{itemize}
     \end{itemize}
+\end{frame}
+
+\begin{frame}
+  Primeri v Matlabu.
 \end{frame}
 
 \end{document}
