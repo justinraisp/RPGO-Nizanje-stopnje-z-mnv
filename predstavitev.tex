@@ -1,4 +1,7 @@
 \documentclass{beamer}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{booktabs}
 
 % Nastavitve stila predstavitve
 \usetheme{Madrid}
@@ -21,8 +24,9 @@
     Podano imamo Bézierjevo krivuljo stopnje $n$:
     \[ p_n(t) = \sum_{i=0}^n b_i B_i^n(t), \quad t \in [0, 1], \]
     kjer so $b_i$ kontrolne točke in $B_i^n(t)$ Bernsteinovi bazni polinomi stopnje $n$.
-    Naš cilj je poiskati Bézierjevo krivuljo stopnje $m < n$,
+    Naš cilj je poiskati Bézierjevo krivuljo stopnje $m < n$
     \[ \tilde{p}_m(t) = \sum_{i=0}^m c_i B_i^m(t), \quad t \in [0, 1], \]
+     da je razdalja med krivuljama minimalna.
 \end{frame}
 
 % Definicije
@@ -33,8 +37,8 @@
 \end{frame}
 
 % Osnovni izrek
-\begin{frame}{Konstrukcija}
-Nižanje stopnje iz $n$ na $n-1$. Če bi želeli zvišati stopnjo Bézierjeve krivulje, bi uporabili naslednjo zvezo: 
+\begin{frame}{Konstrukcija nižanja stopnje iz $n$ na $n-1$.}
+Konstrukcije se bomo lotili induktivno. Če bi želeli zvišati stopnjo Bézierjeve krivulje, bi uporabili naslednjo zvezo: 
 \[
 b_i = \frac{i}{n} c_{i-1} + \frac{n-i}{n} c_i, \quad i = 0, 1, \ldots, n.
 \]
@@ -58,41 +62,93 @@ saj bi bil sistem sicer predoločen.
   Množici kontrolnih točk $\{c_i^{(I)}\}_{i=0}^{n-1}$ in $\{c_i^{(II)}\}_{i=0}^{n-1}$ predstavljata kontrolna poligona za dve različni Bézierjevi krivulji stopnje $n - 1$. Označimo ju z $\tilde{p}_{n-1}^{(I)}$ in $\tilde{p}_{n-1}^{(II)}$.
 \end{frame}
 
+
+\begin{frame}{Lastnosti krivulj \(\tilde{p}_{n-1}^{(I)}\) in \(\tilde{p}_{n-1}^{(II)}\)}
+    Krivulji \(\tilde{p}_{n-1}^{(I)}\) in \(\tilde{p}_{n-1}^{(II)}\) imata naslednji lastnosti:
+    \begin{itemize}
+        \item \(p_n\) in \(\tilde{p}_{n-1}^{(I)}\) imata enaki vrednosti v \(t = 0\),
+        \item \(p_n\) in \(\tilde{p}_{n-1}^{(II)}\) imata enaki vrednosti v \(t = 1\).
+    \end{itemize}
+\end{frame}
+
+
 \begin{frame}
   Sedaj moramo poiskati še kontrolne točke $\{c_i\}_{i=0}^{n-1}$ končne Bézierjeve krivulje $\tilde{p}_{n-1}$.
-  Za kontrolne točke vzamemi linearno kombinacijo točk, določenih z zgornjima izrazoma:
+  Za kontrolne točke vzamemo linearno kombinacijo točk, določenih z zgornjima izrazoma:
   \[ c_i = (1 - \lambda_i) \cdot c_i^{(I)} + \lambda_i \cdot c_i^{(II)} \quad \text{za} \quad i = 0, 1, \ldots, n - 1. \]
   Z uvedbo faktorjev $\{\lambda_i \in \mathbb{R}\}$ prevedemo problem iskanja kontrolnih točk $\{c_i\}_i$ na problem računanja ustreznih faktorjev $\{\lambda_i\}_i$, za katere velja, da je $d_2(p_n, \tilde{p}_{n-1})$ minimalna.
 \end{frame}
 
 \begin{frame}{Izbira uteži}
    Da se pokazati, da če za krivuljo $p_n$ z $\Delta_n b_0 \neq 0$ in $2\alpha \leq n$, izberemo faktorje $\lambda_i$ kot: 
-    \[
-    \lambda_i = \left( \frac{2n}{n + 2\alpha} \right)^{-1} \cdot \sum_{j=0}^i \left( \frac{n}{j - \alpha} \right) \left( \frac{n}{j + \alpha} \right), \quad i = 0, 1, \ldots, n - 1,
-    \]
+\[
+\lambda_i = \binom{2n}{n + 2\alpha}^{-1} \cdot \sum_{j=0}^i \binom{n}{j - \alpha} \binom{n}{j + \alpha}, \quad i = 0, 1, \ldots, n - 1,
+\]
+
     potem za $t_0 = 0$ in $t_1 = 1$ velja:
     \[
     \frac{d^r}{dt^r} p_n(t) \bigg|_{t=t_0} = \frac{d^r}{dt^r} \tilde{p}_{n-1}(t) \bigg|_{t=t_0}, \quad 0 \leq r \leq \alpha - 1.
     \]
 \end{frame}
 
-% Algoritem
-\begin{frame}{Algoritem}
-    \begin{itemize}
-        \item Začetni podatki: kontrolne točke $b_0, \ldots, b_n$ in ciljna stopnja $m$.
-        \item Postopek:
-        \begin{enumerate}
-            \item Izračun $c_i^{(I)}$ in $c_i^{(II)}$ za stopnjo $n$ do $n-1$.
-            \item Izračun kombinacije $c_i$ z utežmi $\lambda_i$.
-            \item Ponavljanje postopka za nižanje stopnje do $m$.
-        \end{enumerate}
-        \item Lastnosti algoritma:
-        \begin{itemize}
-            \item Ohranja zveznost do reda $\alpha-1$ v robnih točkah.
-            \item $L_2$-norma ostaja minimalna.
-        \end{itemize}
-    \end{itemize}
+\begin{frame}{Izbira uteži}
+\[
+\begin{array}{c|c|ccccccc}
+\toprule
+\textbf{Parameter} & n & \lambda_0 & \lambda_1 & \lambda_2 & \lambda_3 & \lambda_4 & \lambda_5 & \lambda_6 \\
+\midrule
+\alpha = 1 & 3 & 0 & \frac{1}{2} & 1 & & & & \\
+           & 4 & 0 & \frac{3}{14} & \frac{11}{14} & 1 & & & \\
+           & 5 & 0 & \frac{1}{12} & \frac{1}{2} & \frac{11}{12} & 1 & & \\
+\midrule
+\alpha = 2 & 5 & 0 & 0 & \frac{1}{5} & 1 & 1 & & \\
+           & 6 & 0 & 0 & \frac{5}{22} & \frac{1}{2} & \frac{17}{22} & 1 & \\
+           & 7 & 0 & 0 & \frac{5}{52} & \frac{1}{2} & \frac{47}{52} & 1 & 1 \\
+\bottomrule
+\end{array}
+\]
 \end{frame}
+
+\begin{frame}{Posplošitev znižanja stopnje}
+    Doslej smo zniževali stopnjo le iz \(n\) na \(n-1\). Sedaj želimo splošnejši algoritem za znižanje stopnje iz \(n\) do \(m\), kjer \(m < n\).
+    Postopek je iterativen: na vsakem koraku zmanjšamo stopnjo krivulje za eno, dokler ne dosežemo želene stopnje.
+    Ključne lastnosti:
+        \begin{itemize}
+            \item Nova krivulja in originalna krivulja se ujemata v \(\alpha-1\) prvih odvodih na robnih točkah.
+            \item \(L^2\)-norma minimizira razdaljo med krivuljama.
+        \end{itemize}
+    Uporaba drugih norm, npr. \(d_\infty\), ne bi zagotovila minimizacije z iterativnim algoritmom.
+\end{frame}
+
+\begin{frame}{Algoritem}
+    \textbf{Vhodni podatki:} \(\{b_0, b_1, \ldots, b_n\}, k, \alpha \)
+    \begin{itemize}
+        \item \(c_0 = b_0, \quad c_{n-1} = b_n\)
+        \item \(\lambda = lambda(n, \alpha)\)
+    \end{itemize}
+
+    \textbf{Postopek:}
+    \begin{enumerate} % Added enumerate here to encapsulate the process
+        \item \textbf{While} \(k > 0\) \textbf{do}
+        \begin{enumerate}
+            \item \textbf{For} \(i = 1, \ldots, n - 2\) \textbf{do}
+            \[
+            c_i^{(1)} = \frac{1}{n-i}\left(n b_i - i c_{i-1}^{(1)}\right)
+            \]
+            \[
+            c_{n-i-1}^{(2)} = \frac{1}{n-i+1}\left(n b_{n-i+1} - (i - 1) c_{n-i+1}^{(2)}\right)
+            \]
+            \item \textbf{For} \(i = 1, \ldots, n - 2\) \textbf{do}
+            \[
+            c_i = (1 - \lambda_i)c_i^{(1)} + \lambda_i c_i^{(2)}
+            \]
+            \item \(k = k - 1\)
+        \end{enumerate}
+    \end{enumerate}
+\end{frame}
+
+
+
 
 \begin{frame}
   Primeri v Matlabu.

@@ -17,8 +17,7 @@ function lambda = compute_lambda(n, alpha)
 
     for i = 1:(n)
         vsota = 0;
-        for j = 0:(i-1) % zanko omejimo na i-1, ker MATLAB indeksiranje ne podpira i=0
-            % Preveri veljavnost za nchoosek
+        for j = 0:(i-1)
             if (j-alpha >= 0) && (j-alpha <= n) && (j+alpha >= 0) && (j+alpha <= n)
                 vsota = vsota + nchoosek(n, j-alpha) * nchoosek(n, j+alpha);
             end
